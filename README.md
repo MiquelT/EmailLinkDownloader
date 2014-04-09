@@ -45,7 +45,7 @@ Una vez configurado ejecutamos el script:
 Opciones:
 ------------
 
-* -d : descargará los archivos de los links que encuentre.
+* -d : Descargará los archivos de los links que encuentre.
 * -i : Fecha de inicio de búsqueda de emails.
 * -e : Fecha de finalización de búsqueda de emails.
 
