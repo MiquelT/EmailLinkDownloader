@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Email Link Downloader by MiquelT</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Email Link Downloader</h1>
+        <h2>Lee los emails de un determinado label y descarga todos los links que encuentra.</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/MiquelT/EmailLinkDownloader/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/MiquelT/EmailLinkDownloader/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/MiquelT/EmailLinkDownloader" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a name="email-link-downloader" class="anchor" href="#email-link-downloader"><span class="octicon octicon-link"></span></a>Email Link Downloader</h1>
+
+<h1></h1>
+
+<p>Email Link Downloader es un script hecho en python que permite conectarse a una cuenta de correo y descargarse automáticamente todos los links que encuentre en los emails que contengan el los labels especificados:</p>
+
+<h2>
+<a name="instrucciones" class="anchor" href="#instrucciones"><span class="octicon octicon-link"></span></a>Instrucciones</h2>
+
+<p>Editar el fichero config.xml con los datos de tu email:</p>
+
+<p></p>
+
+<pre><code>&lt;!-- configuracion del email --&gt;
+&lt;email&gt;
+    &lt;!-- tipo de conexion --&gt;
+    &lt;config&gt;
+        &lt;ssl&gt;imap.gmail.com&lt;/ssl&gt; &lt;!-- imap.gmail.com para gmail --&gt;
+    &lt;/config&gt;
+    &lt;!-- autentificacion --&gt;
+    &lt;auth&gt;
+        &lt;user&gt;suemaillist@gmail.com&lt;/user&gt;
+        &lt;password&gt;PASSWORD&lt;/password&gt;
+    &lt;/auth&gt;
+&lt;/email&gt;
+
+
+&lt;!-- aqui hay que poner todos los labels por los que se quiere buscar --&gt;
+&lt;labels&gt;
+    &lt;label&gt;pruebas&lt;/label&gt;
+    &lt;label&gt;label2&lt;/label&gt;
+&lt;/labels&gt;
+
+&lt;!-- Aqui se guardara el timestamp del ultimo email leido. NO MODIFICAR --&gt;
+&lt;lastDownloads&gt;
+
+&lt;/lastDownloads&gt;
+
+&lt;!-- directorio en el que queremos poner las descargas --&gt;
+&lt;dir&gt;archivos/&lt;/dir&gt;
+</code></pre>
+
+<p></p>
+
+<p>Una vez configurado ejecutamos el script:</p>
+
+<p><code>python emailLinkDownloader.py</code></p>
+
+<h2>
+<a name="dependencias" class="anchor" href="#dependencias"><span class="octicon octicon-link"></span></a>Dependencias</h2>
+
+<ul>
+<li>Python 2 (2.7 should be sufficient)</li>
+<li>
+<a href="https://pypi.python.org/pypi/python-dateutil">python-dateutil</a> version 2.2</li>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>.</p>
+
+<h2>
+<a name="como-puede-ayudar" class="anchor" href="#como-puede-ayudar"><span class="octicon octicon-link"></span></a>Como puede ayudar</h2>
+
+<p>Si encuentra cualquier error o problema puede <a href="https://twitter.com/miqueltur">contactar conmigo en Twitter</a> o por <a href="mailto:miquel.tur.m@gmail.com">email</a>.</p>
+      </section>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-49853894-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
