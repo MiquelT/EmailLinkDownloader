@@ -6,23 +6,19 @@
         <config>
             <ssl>imap.gmail.com</ssl>
         </config>
-        <!-- autentificacion -->
+        
         <auth>
-            <user>email@gmail.com</user>
+            <user>UserEmail@gmail.com</user>
             <password>PASSWORD</password>
         </auth>
     </email>
 
 
-    <!-- aqui hay que poner los labels que se quieren buscar -->
+    <!-- Los labels por los que se quiere buscar -->
     <labels>
         <label>pruebas</label>
     </labels>
 
-    <!-- Aqui se guardara el timestamp del ultimo email leido. No modificar -->
-    <lastDownloads>
-
-    </lastDownloads>
 
     <!-- directorio en el que queremos poner las descargas -->
     <dir>archivos/</dir>

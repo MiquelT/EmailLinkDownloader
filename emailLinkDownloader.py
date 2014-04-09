@@ -8,6 +8,9 @@ import sys
 from email.parser import HeaderParser
 import urllib2
 import os
+import argparse
+import dateutil.tz
+from time import gmtime, strftime
 
 
 user = None
@@ -15,10 +18,57 @@ password = None
 mail = None
 conf_SSL = None
 
+root = None
+tree = None
+path = None
+
+download = None
+start_Date = None
+end_Date = None
+
 labels = []
-lastUpdates = {}
+
+def read_options():
+
+    today = datetime.now().strftime("%Y-%m-%d");
+
+    parser = argparse.ArgumentParser(description='email Link Downloader',
+                                 prefix_chars='-',version='1.0')
+
+    parser.add_argument('-d', '--download', action='store_true', default=False,
+                    dest='download',
+                    help='Download finded files')
+
+    parser.add_argument('-i', '--init', action='store', dest='init', default=today,
+                    help='First day for search - Format: YYYY-MM-DD')
+
+    parser.add_argument('-e', '--end', action='store', dest='end', default=today,
+                    help='Last day for search - Format: YYYY-MM-DD')
 
 
+    results = parser.parse_args()
+
+    global download
+    global start_Date
+    global end_Date
+
+    download = results.download
+    start_Date = results.init
+    end_Date = results.end
+
+
+    validate(start_Date,parser)
+    validate(end_Date,parser)
+
+def validate(date_text, parser):
+    try:
+        datetime.strptime(date_text, '%Y-%m-%d')
+    except ValueError:
+        print "\nFormato de fecha incorrecto, debe ser en el siguiente formato YYYY-MM-DD\n"
+
+        parser.print_help()
+
+        sys.exit(0)
 
 def read_config():
 
@@ -29,6 +79,11 @@ def read_config():
     global root
     global tree
     global path
+
+
+
+    read_options()
+
 
     tree = ET.parse('config.xml')
 
@@ -43,14 +98,29 @@ def read_config():
     for l in root.find('labels').findall('label'):
         labels.append(l.text)
 
-    for l in root.find('lastDownloads').findall('timestamp'):
-        lab = {l.attrib['name']:l.text}
-        lastUpdates.update(lab)
 
     path = root.find('dir').text
     if path[-1:] != '/': path += '/'
     create_directory(path)
 
+def start_date_timestamp(tzinfo):
+    year = int(start_Date.split('-')[0])
+    mounth = int(start_Date.split('-')[1])
+    day = int(start_Date.split('-')[2])
+
+    date_init =  datetime(year, mounth, day, 0, 0,0,0,tzinfo=tzinfo)
+    timestamp_init = float(time.mktime(date_init.timetuple()))
+    return timestamp_init
+
+
+def end_date_timestamp(tzinfo):
+
+    year = int(end_Date.split('-')[0])
+    mounth = int(end_Date.split('-')[1])
+    day = int(end_Date.split('-')[2])
+    date_end =  datetime(year, mounth, day, 23, 59,59,999999,tzinfo=tzinfo)
+    timestamp_end = float(time.mktime(date_end.timetuple()))
+    return timestamp_end
 
 
 
@@ -67,22 +137,12 @@ def create_directory(path):
 
 def read_emails(lab,listaFinal):
 
-    if lab in lastUpdates:
-        gdate = lastUpdates[lab]
-        gdate = float(gdate)
-    else:
-        gdate = float(0)
-
-
     mail.select(lab)
-    print lab
     result, data = mail.search(None, "ALL")
 
 
     ids = data[0]
     id_list = ids.split()
-
-    print len(id_list)
 
     for email_id in id_list:
 
@@ -110,9 +170,11 @@ def read_emails(lab,listaFinal):
         except:
             continue
 
+        init_date_compare = start_date_timestamp(date.tzinfo)
+        end_date_compare = end_date_timestamp(date.tzinfo)
 
-        if gdate < fdate:
-            updateDate(lab,fdate)
+
+        if init_date_compare <= fdate and fdate <= end_date_compare:
             get_links(data[0][1],listaFinal)
 
 
@@ -139,31 +201,6 @@ def get_links(data,listaFinal):
         if 'http' in link and len(link.split(".")) > 1 and link not in listaFinal:
             listaFinal.append(link)
 
-
-
-
-
-
-
-
-def updateDate(lab,date):
-    timestamps = root.find('lastDownloads').findall('timestamp')
-
-    if lab in lastUpdates:
-        for t in timestamps:
-            if t.get('name') == lab:
-                t.text = str(date)
-                tree.write('config.xml')
-    else:
-        a = ET.Element('timestamp')
-        a.set('name',lab)
-        a.text = str(date)
-        root.find('lastDownloads').append(a)
-
-        lab = {lab:str(date)}
-        lastUpdates.update(lab)
-
-        tree.write('config.xml')
 
 
 
@@ -204,6 +241,7 @@ def download(fileUrl):
 
 
 def read_links(listaFinal):
+    lista_links = []
     for l in listaFinal:
         try:
             final_l = ""
@@ -216,13 +254,30 @@ def read_links(listaFinal):
             if l[-1:] == '=':
                 l = l[:-1]
 
-            download(l)
+            if download: download(l)
+            lista_links.append(l)
+
         except:
             continue
+    return lista_links
 
 
+def create_file(lista,lab):
+    today = datetime.now().strftime("%Y-%m-%d");
 
+    name = lab + "_" +str(today);
+    finalname = name + ".txt"
+    num = 1
+    while os.path.isfile(path+finalname):
+        finalname = name + "_" + str(num) + ".txt"
+        num += 1
 
+    f = open(path+finalname, 'w')
+
+    for l in lista:
+        f.write(l + "\n")
+
+    print "\nCreado el fichero "+finalname+" en la ruta "+ path+finalname +" con los enlaces encontrados.\n"
 
 if __name__ == "__main__":
     read_config()
@@ -232,4 +287,9 @@ if __name__ == "__main__":
     for lab in labels:
         listaFinal = []
         read_emails(lab,listaFinal)
-        read_links(listaFinal)
+        lista_links = read_links(listaFinal)
+        if len(lista_links) > 0: create_file(lista_links,lab)
+        else: print "\nNo hay links en los emails de estas fechas.\n"
+
+
+

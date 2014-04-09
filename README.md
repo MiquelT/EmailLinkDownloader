@@ -1,7 +1,8 @@
 # Email Link Downloader
 =========
 
-Email Link Downloader es un script hecho en python que permite conectarse a una cuenta de correo y descargarse automáticamente todos los links que encuentre en los emails que contengan el los labels especificados:
+Email Link Downloader es un script hecho en python que permite conectarse a una cuenta de correo y crear un fichero con todos los links que encuentre en los emails que esten identificados por los labels especificados entre dos fechas.
+También puede descargar directamente los archivos de los links.
 
 Instrucciones
 ------------
@@ -30,10 +31,6 @@ Editar el fichero config.xml con los datos de tu email:
         <label>label2</label>
     </labels>
 
-    <!-- Aqui se guardara el timestamp del ultimo email leido. NO MODIFICAR -->
-    <lastDownloads>
-
-    </lastDownloads>
 
     <!-- directorio en el que queremos poner las descargas -->
     <dir>archivos/</dir>
@@ -45,14 +42,22 @@ Una vez configurado ejecutamos el script:
 
 `python emailLinkDownloader.py`
 
+Opciones:
+------------
+
+* -d : descargará los archivos de los links que encuentre.
+* -i : Fecha de inicio de búsqueda de emails.
+* -e : Fecha de finalización de búsqueda de emails.
+
 Dependencias
 ------------
 * Python 2 (2.7 should be sufficient)
 * [python-dateutil](https://pypi.python.org/pypi/python-dateutil) version 2.2
+* [Argparse](https://docs.python.org/2/howto/argparse.html) version 1.2.1
 
 License
 -------
-.
+Esta obra está sujeta a la licencia [Reconocimiento-NoComercial 4.0 Internacional de Creative Commons](http://creativecommons.org/licenses/by-nc/4.0/). Para ver una copia de esta licencia, visite visite[http://creativecommons.org/licenses/by-nc/4.0/](http://creativecommons.org/licenses/by-nc/4.0/).
 
 
 Como puede ayudar
