@@ -1,0 +1,30 @@
+<conf>
+
+    <!-- configuracion del email -->
+    <email>
+        <!-- tipo de conexion -->
+        <config>
+            <ssl>imap.gmail.com</ssl>
+        </config>
+        <!-- autentificacion -->
+        <auth>
+            <user>email@gmail.com</user>
+            <password>PASSWORD</password>
+        </auth>
+    </email>
+
+
+    <!-- aqui hay que poner los labels que se quieren buscar -->
+    <labels>
+        <label>pruebas</label>
+    </labels>
+
+    <!-- Aqui se guardara el timestamp del ultimo email leido. No modificar -->
+    <lastDownloads>
+
+    </lastDownloads>
+
+    <!-- directorio en el que queremos poner las descargas -->
+    <dir>archivos/</dir>
+
+</conf>
